@@ -1,3 +1,5 @@
+import router from '@ohos.router';
+
 import { ColorConstants } from '../constants/ColorConstants'
 import { StyleConstants } from '../constants/StyleConstants'
 
@@ -57,6 +59,11 @@ struct Login {
           .margin(StyleConstants.MARGIN_NORMAL)
           .onClick(() => {
             console.info('用户点击了登录按钮')
+            router.pushUrl({
+              url: 'pages/MainPage'
+            }).catch((error: Error) => {
+              console.info('触发 router 路由事件时发生了错误: ', error)
+            })
           })
       }
       .width('100%')
