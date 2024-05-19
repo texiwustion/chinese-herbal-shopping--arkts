@@ -3,9 +3,10 @@
  */
 export class StyleConstants {
     /**
-     输入用户名的最大长度
+     输入的最大长度
      */
-    static readonly USERNAME_MAX_LENGTH: number = 6;
+    static readonly USERNAME_MAX_LENGTH: number = 6
+    static readonly PASSWORD_MAX_LENGTH: number = 20
     /**
      输入框内边距
      */

@@ -23,20 +23,16 @@ struct Login {
           用户名和密码 -- 输入
          */
         TextInput({placeholder: "请输入用户名"})
-          .placeholderColor(ColorConstants.PLACEHOLDER)
           .maxLength(StyleConstants.USERNAME_MAX_LENGTH) // 用户名最大长度: 6
-          .padding(StyleConstants.TEXT_INPUT_PADDING)
-          .margin(StyleConstants.TEXT_INPUT_MARGIN)
+          .inputStyle()
           .onChange(data => {
             this.username = data;
             console.info('username: ' + data);
           })
         TextInput({placeholder: "请输入密码"})
           .type(InputType.Password)
-          .placeholderColor(ColorConstants.PLACEHOLDER)
-          .maxLength(StyleConstants.USERNAME_MAX_LENGTH) // 用户名最大长度: 6
-          .padding(StyleConstants.TEXT_INPUT_PADDING)
-          .margin(StyleConstants.TEXT_INPUT_MARGIN)
+          .maxLength(StyleConstants.PASSWORD_MAX_LENGTH) // 密码最大长度: 20
+          .inputStyle()
           .onChange(data => {
             this.password = data;
             console.info('password: ' + data);
@@ -67,4 +63,13 @@ struct Login {
     }
     .height('100%')
   }
+}
+
+/**
+ * 公共的样式函数
+ */
+@Extend(TextInput) function inputStyle() {
+  .placeholderColor(ColorConstants.PLACEHOLDER)
+  .padding(StyleConstants.TEXT_INPUT_PADDING)
+  .margin(StyleConstants.TEXT_INPUT_MARGIN)
 }
