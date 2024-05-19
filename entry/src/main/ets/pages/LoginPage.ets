@@ -14,7 +14,7 @@ struct Login {
         Image($r("app.media.icon"))
           .width('80vp')
           .height('80vp')
-          .margin({bottom: '30vp'})
+          .margin({bottom: StyleConstants.MARGIN_MORE})
         Text(this.message)
           .fontSize('30fp')
           .fontWeight(FontWeight.Bold)
@@ -40,6 +40,27 @@ struct Login {
           .onChange(data => {
             this.password = data;
             console.info('password: ' + data);
+          })
+
+        /**
+         * 帮助文字 -- 忘记密码
+         */
+        Row() {
+          Text('忘记密码')
+            .fontSize('18fp')
+            .fontColor(Color.Blue)
+        }
+        .width(StyleConstants.WIDTH_NORMAL)
+        .justifyContent(FlexAlign.End)
+
+        /**
+         * 登录按钮 -- 点击进行用户验证等事件
+         */
+        Button('登录', {type: ButtonType.Capsule, stateEffect: true})
+          .width(StyleConstants.WIDTH_NORMAL)
+          .margin(StyleConstants.MARGIN_NORMAL)
+          .onClick(() => {
+            console.info('用户点击了登录按钮')
           })
       }
       .width('100%')
