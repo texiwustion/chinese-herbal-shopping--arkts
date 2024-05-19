@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import promptAction from '@ohos.promptAction';
 
 import { ColorConstants } from '../constants/ColorConstants'
 import { StyleConstants } from '../constants/StyleConstants'
@@ -59,6 +60,15 @@ struct Login {
           .margin(StyleConstants.MARGIN_NORMAL)
           .onClick(() => {
             console.info('用户点击了登录按钮')
+            if (this.username == '' || this.password == '') {
+              console.info('用户名或者密码为空')
+              promptAction.showToast({
+                message: '用户名或密码不能为空',
+                duration: 3000,
+                bottom: '60vp'
+              })
+              return
+            }
             router.pushUrl({
               url: 'pages/MainPage'
             }).catch((error: Error) => {
