@@ -4,3 +4,10 @@ export class ITabItem {
   iconUnselected: Resource;
   iconSelected: Resource;
 }
+
+export class IHerbalItem {
+  name: string = '';
+  image: Resource | string = '';
+  price: number = -1;
+  class: string;
+}

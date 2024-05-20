@@ -17,4 +17,8 @@ export class ColorConstants {
      */
     static readonly GREY_DEEP: number = 0xC1CAD6;
     static readonly GREY_LIGHT: number = 0xDDE1E4;
+    /**
+     * color red
+     */
+    static readonly RED: number = 0xB80C09;
 }
