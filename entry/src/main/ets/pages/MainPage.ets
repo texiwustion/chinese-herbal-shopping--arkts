@@ -13,10 +13,23 @@ struct Main {
    */
   private controller: TabsController = new TabsController()
   private tabItems: Array<ITabItem> = [
-    {title: '主页', render: Home},
-    {title: '购物车', render: Cart},
-    {title: '我的', render: Mine}
+    {title: '主页', render: Home, iconUnselected: $r('app.media.home_0'), iconSelected: $r('app.media.home_1')},
+    {title: '购物车', render: Cart, iconUnselected: $r('app.media.cart_0'), iconSelected: $r('app.media.cart_1')},
+    {title: '我的', render: Mine, iconUnselected: $r('app.media.mine_0'), iconSelected: $r('app.media.mine_1')}
   ]
+
+  @State currentTabIndex: number = 0
+  @Builder TabBuilder(tabItem: ITabItem, index) {
+    Column() {
+      Image(this.currentTabIndex === index ? tabItem.iconSelected : tabItem.iconUnselected)
+        .width('25vp')
+        .height('25vp')
+      Text(tabItem.title)
+        .fontSize('14fp')
+        .fontWeight(500)
+        .margin({top: StyleConstants.MARGIN_LESS})
+    }
+  }
 
   build() {
     Row() {
@@ -24,20 +37,23 @@ struct Main {
         /**
          * 数据抽象上升到 tabItems, 用 ForEach 渲染
          */
-        ForEach(this.tabItems, (tabItem: ITabItem) => {
+        ForEach(this.tabItems, (tabItem: ITabItem, index: number) => {
           TabContent() {
             Column() {
               RenderComponent({content: tabItem.render})
             }
               .columnDemo(Color.Pink)
           }
-          .tabBar(tabItem.title)
+          .tabBar(this.TabBuilder(tabItem, index))
         }, (tabItem: ITabItem) => JSON.stringify(tabItem))
       }
       .vertical(false)
       .barWidth(StyleConstants.WIDTH_FULL)
       .barHeight('60vp')
       .animationDuration(200)
+      .onChange((index: number) => {
+        this.currentTabIndex = index
+      })
     }
     .height('100%')
   }
