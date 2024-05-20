@@ -4,6 +4,7 @@ import Home from '../views/HomePage'
 import Cart from '../views/CartPage'
 import Mine from '../views/MinePage'
 import RenderComponent from '../components/RenderComponent'
+import { ColorConstants } from '../constants/ColorConstants'
 
 @Entry
 @Component
@@ -42,7 +43,7 @@ struct Main {
             Column() {
               RenderComponent({content: tabItem.render})
             }
-              .columnDemo(Color.Pink)
+            .columnDemo(ColorConstants.GREY_DEEP)
           }
           .tabBar(this.TabBuilder(tabItem, index))
         }, (tabItem: ITabItem) => JSON.stringify(tabItem))
