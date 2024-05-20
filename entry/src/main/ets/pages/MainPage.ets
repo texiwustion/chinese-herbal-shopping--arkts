@@ -1,17 +1,44 @@
+import { StyleConstants } from '../constants/StyleConstants'
 @Entry
 @Component
 struct Main {
-  @State message: string = 'Hello World'
+  /**
+   * Tabs 的控制器
+   */
+  private controller: TabsController = new TabsController()
 
   build() {
     Row() {
-      Column() {
-        Text(this.message)
-          .fontSize(50)
-          .fontWeight(FontWeight.Bold)
+      Tabs({barPosition: BarPosition.End}) {
+        TabContent() {
+          Column()
+            .columnDemo(Color.White)
+        }
+        .tabBar('主页')
+
+        TabContent() {
+          Column()
+            .columnDemo(Color.Pink)
+        }
+        .tabBar('购物车')
+
+        TabContent() {
+          Column()
+            .columnDemo(Color.Orange)
+        }
+        .tabBar('我的')
       }
-      .width('100%')
+      .vertical(false)
+      .barWidth(StyleConstants.WIDTH_FULL)
+      .barHeight('60vp')
+      .animationDuration(200)
     }
     .height('100%')
   }
+}
+
+@Extend(Column) function columnDemo(color: Color) {
+  .width('100%')
+  .height('100%')
+  .backgroundColor(color)
 }
