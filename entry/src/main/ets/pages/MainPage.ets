@@ -50,7 +50,7 @@ struct Main {
       .vertical(false)
       .barWidth(StyleConstants.WIDTH_FULL)
       .barHeight('60vp')
-      .animationDuration(200)
+      .animationDuration(100)
       .onChange((index: number) => {
         this.currentTabIndex = index
       })
