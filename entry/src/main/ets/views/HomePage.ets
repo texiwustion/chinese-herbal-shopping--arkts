@@ -1,7 +1,8 @@
 import { ColorConstants } from '../constants/ColorConstants'
 import { StyleConstants } from '../constants/StyleConstants'
 import { classifyTitle, herbalInfo } from '../models/DataModel'
-import { IHerbalItem } from '../models/ViewModel'
+import { IHerbalModel } from '../models/ViewModel'
+import router from '@ohos.router'
 @Component
 struct Home {
   @State titleIndex: number = 0
@@ -59,7 +60,7 @@ struct Home {
   }
 
   @Builder
-  HerbalItem(info: IHerbalItem) {
+  HerbalItem(info: IHerbalModel) {
     Column() {
       Image(info.image)
         .width('132vp')
@@ -105,6 +106,18 @@ struct Home {
     .width(StyleConstants.WIDTH_FULL)
     .backgroundColor(Color.White)
     .borderRadius('8vp')
+    .onClick(() => {
+      console.info('用户点击了药材卡片, 该药材的 id = ' + info.id)
+      router.pushUrl({
+        url: 'views/DetailPage' // 目标url
+      }, router.RouterMode.Standard, (err) => {
+        if (err) {
+          console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+          return;
+        }
+        console.info('Invoke pushUrl succeeded.');
+      });
+    })
   }
 
   build() {
@@ -114,7 +127,7 @@ struct Home {
         this.ClassifyTitle()
         Scroll() {
           Grid() {
-            ForEach(herbalInfo, (item: IHerbalItem) => {
+            ForEach(herbalInfo, (item: IHerbalModel) => {
               GridItem() {
                 this.HerbalItem(item)
               }
