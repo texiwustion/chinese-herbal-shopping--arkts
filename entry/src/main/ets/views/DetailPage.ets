@@ -67,8 +67,7 @@ struct Detail {
               .onClick(() => {
                 console.info('用户点击了药材详情页的购物车图标')
                 router.pushUrl({
-                  url: 'views/CartPage', // 目标url
-                  
+                  url: 'views/CartEntry', // 目标url
                 }, router.RouterMode.Standard, (err) => {
                   if (err) {
                     console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
