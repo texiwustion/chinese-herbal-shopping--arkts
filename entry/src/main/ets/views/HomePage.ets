@@ -109,7 +109,8 @@ struct Home {
     .onClick(() => {
       console.info('用户点击了药材卡片, 该药材的 id = ' + info.id)
       router.pushUrl({
-        url: 'views/DetailPage' // 目标url
+        url: 'views/DetailPage', // 目标url
+        params: info
       }, router.RouterMode.Standard, (err) => {
         if (err) {
           console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
