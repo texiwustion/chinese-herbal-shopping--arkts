@@ -43,7 +43,7 @@ struct Main {
             Column() {
               RenderComponent({content: tabItem.render})
             }
-            .columnDemo(ColorConstants.GREY_LIGHT)
+            .columnDemo(Color.White)
           }
           .tabBar(this.TabBuilder(tabItem, index))
         }, (tabItem: ITabItem) => JSON.stringify(tabItem))

@@ -1,4 +1,4 @@
-import { IHerbalModel, ICommentModel } from './ViewModel'
+import { IHerbalModel, ICommentModel, IOrderModel } from './ViewModel'
 export const classifyTitle: string[] = [
   "全部",
   "分类",
@@ -62,4 +62,12 @@ export const fakeComments: ICommentModel[] = [
   { id: 8, herbalId: 4, username: 'Hannah', comment: 'Decent herbal, but a bit pricey.' },
   { id: 9, herbalId: 1, username: 'Ian', comment: 'Helped me sleep better, very satisfied.' },
   { id: 10, herbalId: 2, username: 'Julia', comment: 'No effect on me, waste of money.' },
+];
+
+export const fakeOrderItems: IOrderModel[] = [
+  { id: 1, herbal: herbalInfo[1 - 1], quantity: 2, username: 'Alice', status: 'added' },
+  { id: 2, herbal: herbalInfo[3 - 1], quantity: 1, username: 'Bob', status: 'added' },
+  { id: 3, herbal: herbalInfo[4 - 1], quantity: 3, username: 'Charlie', status: 'added' },
+  { id: 4, herbal: herbalInfo[2 - 1], quantity: 1, username: 'David', status: 'purchased' },
+  { id: 5, herbal: herbalInfo[2 - 1], quantity: 2, username: 'Eve', status: 'purchased' },
 ];

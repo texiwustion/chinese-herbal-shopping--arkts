@@ -98,13 +98,12 @@ struct Home {
       }
       .width(StyleConstants.WIDTH_FULL)
       .alignItems(HorizontalAlign.Start)
-      .backgroundColor(Color.White)
       .borderRadius('4vp')
     }
     .padding('12vp')
     .height('263vp')
     .width(StyleConstants.WIDTH_FULL)
-    .backgroundColor(Color.White)
+    .backgroundColor(0xf9f9f9)
     .borderRadius('8vp')
     .onClick(() => {
       console.info('用户点击了药材卡片, 该药材的 id = ' + info.id)

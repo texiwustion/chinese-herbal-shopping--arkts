@@ -21,3 +21,11 @@ export class ICommentModel {
   username: string;
   comment: string;
 }
+
+export class IOrderModel {
+  id: number;
+  herbal: IHerbalModel;
+  quantity: number;
+  username: string;
+  status: 'added' | 'purchased';
+}
