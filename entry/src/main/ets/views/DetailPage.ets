@@ -1,6 +1,9 @@
 import router from '@ohos.router'
 import { ColorConstants } from '../constants/ColorConstants'
 import { IHerbalModel } from '../models/ViewModel'
+import { filterCommentsByHerbalId } from '../utils/commentUtil'
+import CommentList from '../features/CommentList'
+import { fakeComments } from '../models/DataModel'
 
 @Entry
 @Component
@@ -33,12 +36,13 @@ struct Detail {
                   .fontSize('18fp')
               }
               .alignItems(HorizontalAlign.Start)
-              .backgroundColor(ColorConstants.GREY_LIGHT)
+              .backgroundColor(0xf8f8f8)
               .width("100%")
               .borderRadius('4vp')
               .margin('20vp')
               .padding('10vp')
 
+              // 药材描述和剩余库存 -- 文字
               Column() {
                 Text(`药材描述: ${this.info.description ? this.info.description : "无"}`)
                   .fontSize('15fp')
@@ -47,16 +51,26 @@ struct Detail {
                   .fontSize('15fp')
               }
               .alignItems(HorizontalAlign.Start)
-              .backgroundColor(ColorConstants.GREY_LIGHT)
+              .backgroundColor(0xf8f8f8)
               .width("100%")
               .borderRadius('4vp')
               .padding('10vp')
+
+              // 评价信息--列表
+              Column() {
+                Text('评价信息')
+                  .fontSize('21fp')
+                  .margin('10vp')
+                CommentList({commentData: filterCommentsByHerbalId(fakeComments, this.info.id)})
+              }
+              .backgroundColor(0xf8f8f8)
+              .borderRadius('4vp')
+              .margin({
+                top: '10vp'
+              })
+              .alignItems(HorizontalAlign.Start)
             }
             .padding('10vp')
-
-            Column() {
-              Text('评价信息')
-            }
           }
 
           Flex({direction: FlexDirection.Row, justifyContent: FlexAlign.End, alignItems: ItemAlign.Center}) {

@@ -15,3 +15,9 @@ export class IHerbalModel {
   description?: string = '无描述';
 }
 
+export class ICommentModel {
+  id: number;
+  herbalId: number;
+  username: string;
+  comment: string;
+}
