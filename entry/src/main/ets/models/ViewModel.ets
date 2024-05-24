@@ -29,3 +29,8 @@ export class IOrderModel {
   username: string;
   status: 'added' | 'purchased';
 }
+
+export class IUserModel {
+  username: string;
+  password: string;
+}
