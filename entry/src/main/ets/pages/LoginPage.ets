@@ -63,7 +63,7 @@ struct Login {
         /**
          * 帮助文字 -- 忘记密码
          */
-        Flex({justifyContent: FlexAlign.SpaceAround}) {
+        Flex({justifyContent: FlexAlign.SpaceBetween}) {
           Text(this.authTitle[1 - this.authIndex])
             .fontSize('18fp')
             .fontColor(Color.Blue)
@@ -108,7 +108,7 @@ struct Login {
                   })
                 } else {
                   router.pushUrl({
-                    url: 'pages/MainPage'
+                    url: 'pages/MainPage',
                   }).catch((error: Error) => {
                     console.info('触发 router 路由事件时发生了错误: ', error)
                   })

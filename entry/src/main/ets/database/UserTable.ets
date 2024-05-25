@@ -20,8 +20,6 @@ export default class UserTable {
   }
 
   async register(user: IUserModel, callback: Function) {
-    // 加密密码
-    user.password = await encryptMessage(user.password, this.keyPair.pubKey);
     console.info('正在注册用户: ', JSON.stringify(user))
     // 插入用户数据
     this.insertData(user, callback);
@@ -29,11 +27,8 @@ export default class UserTable {
 
   async login(username: string, password: string, callback: Function) {
     this.query(username, async (users: IUserModel[]) => {
-      console.info('users.length = ', users.length)
       if (users.length > 0) {
         let user: IUserModel = users[0]
-        // user.password = await decryptMessage(user.password, this.keyPair.priKey)
-        password = await encryptMessage(password, this.keyPair.pubKey);
         if (user.password === password) {
           // 登录成功
           callback(null);
