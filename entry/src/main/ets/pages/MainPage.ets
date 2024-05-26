@@ -5,6 +5,7 @@ import Cart from '../views/CartPage'
 import Mine from '../views/MinePage'
 import RenderComponent from '../components/RenderComponent'
 import { ColorConstants } from '../constants/ColorConstants'
+import { herbalTable } from '../database/HerbalTable'
 
 @Entry
 @Component
@@ -19,6 +20,7 @@ struct Main {
     {title: '我的', render: Mine, iconUnselected: $r('app.media.mine_0'), iconSelected: $r('app.media.mine_1')}
   ]
 
+
   @State currentTabIndex: number = 0
   @Builder TabBuilder(tabItem: ITabItem, index) {
     Column() {
@@ -32,9 +34,15 @@ struct Main {
     }
   }
 
+  async aboutToAppear() {
+    await herbalTable.loadData(() => {
+      console.info('[herbalTable] 加载药材数据完成')
+    })
+  }
+
   build() {
     Row() {
-      Tabs({barPosition: BarPosition.End}) {
+      Tabs({barPosition: BarPosition.End, controller: this.controller}) {
         /**
          * 数据抽象上升到 tabItems, 用 ForEach 渲染
          */

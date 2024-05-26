@@ -5,14 +5,14 @@ export class ITabItem {
   iconSelected: Resource;
 }
 
-export class IHerbalModel {
+export interface IHerbalModel {
   id: number;
-  name?: string = '无名药材';
-  image?: Resource | string = '';
-  price?: number = -1;
-  class?: string = '未分类';
-  count?: number = -1;
-  description?: string = '无描述';
+  name?: string;
+  image?: Resource | string;
+  price?: number;
+  class?: string;
+  count?: number;
+  description?: string;
 }
 
 export class ICommentModel {
