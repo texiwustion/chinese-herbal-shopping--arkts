@@ -84,7 +84,7 @@ struct Home {
             if (index !== undefined) {
               this.titleIndex = index;
               if (this.titleIndex !== 0) {
-                const key = Object.keys(this.groupedHerbalInfo)[this.titleIndex]
+                const key = Object.keys(this.groupedHerbalInfo)[this.titleIndex - 1]
                 const value = this.groupedHerbalInfo[key]
                 this.currentHerbalInfo = { [key]: value }
               } else {
@@ -189,6 +189,7 @@ struct Home {
       this.HerbalTable.loadData(() => {
         this.HerbalTable.queryAll((result: IHerbalModel[]) => {
           this.groupedHerbalInfo = groupByClass(result)
+          this.currentHerbalInfo = this.groupedHerbalInfo
         });
       })
     })

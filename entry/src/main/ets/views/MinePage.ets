@@ -5,12 +5,13 @@ import { getPurchasedItems } from '../utils/cartUtil'
 
 @Component
 struct Mine {
+  private username = AppStorage.Link('username').get()
 
   build() {
     Row() {
       Flex({direction: FlexDirection.Column, justifyContent: FlexAlign.Start}) {
         Column() {
-          Text('texiw, 欢迎来到中药材商城 !')
+          Text(`${this.username}, 欢迎来到中药材商城 !`)
             .fontSize('21fp')
         }
         .padding('20vp')

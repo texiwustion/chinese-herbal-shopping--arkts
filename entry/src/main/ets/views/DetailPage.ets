@@ -9,10 +9,12 @@ import { fakeComments } from '../models/DataModel'
 @Component
 struct Detail {
   private info: IHerbalModel
+  private username = AppStorage.Link('username').get()
 
   aboutToAppear() {
     this.info = router.getParams() as IHerbalModel
     console.info('药材详情页收到参数: ', JSON.stringify(this.info))
+    console.info('用户名: ', this.username)
   }
 
   build() {

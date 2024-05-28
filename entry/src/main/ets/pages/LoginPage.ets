@@ -5,6 +5,8 @@ import { ColorConstants } from '../constants/ColorConstants'
 import { StyleConstants } from '../constants/StyleConstants'
 import UserTable from '../database/UserTable';
 
+AppStorage.SetOrCreate('username', '');
+
 @Entry
 @Component
 struct Login {
@@ -107,7 +109,9 @@ struct Login {
                     bottom: '60vp'
                   })
                 } else {
-                  router.pushUrl({
+                  // 全局变量
+                  AppStorage.Link('username').set(this.username)
+                  router.replaceUrl({
                     url: 'pages/MainPage',
                   }).catch((error: Error) => {
                     console.info('触发 router 路由事件时发生了错误: ', error)
