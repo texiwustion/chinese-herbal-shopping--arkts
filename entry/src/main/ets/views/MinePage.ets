@@ -1,11 +1,14 @@
 import { ColorConstants } from '../constants/ColorConstants'
 import PurchasedList from '../features/PurchasedList'
 import { fakeOrderItems } from '../models/DataModel'
+import { IOrderModel } from '../models/ViewModel'
 import { getPurchasedItems } from '../utils/cartUtil'
+
 
 @Component
 struct Mine {
   private username = AppStorage.Link('username').get()
+  @StorageLink('orders') orders: IOrderModel[] = []
 
   build() {
     Row() {
@@ -31,7 +34,7 @@ struct Mine {
           .fontColor(ColorConstants.GREEN_DEEP)
           .margin('10vp')
 
-        PurchasedList({purchasedData: getPurchasedItems(fakeOrderItems)})
+        PurchasedList()
       }
 
     }

@@ -2,17 +2,14 @@ import { CounterProduct } from '../components/CounterProduct';
 import { ColorConstants } from '../constants/ColorConstants';
 import { StyleConstants } from '../constants/StyleConstants';
 import { IOrderModel } from '../models/ViewModel'
+import { getPurchasedItems } from '../utils/cartUtil';
 @Component
 struct PurchasedList {
-  private purchasedData: IOrderModel[];
-
-  aboutToAppear() {
-    console.info('已购药材列表数据: ', JSON.stringify(this.purchasedData))
-  }
+  @StorageLink('orders') orders: IOrderModel[] = []
 
   build() {
     List() {
-      ForEach(this.purchasedData, (item: IOrderModel) => {
+      ForEach(getPurchasedItems(this.orders), (item: IOrderModel) => {
         ListItem() {
           Flex({alignItems: ItemAlign.Center}) {
             Image(item.herbal.image)
@@ -31,12 +28,12 @@ struct PurchasedList {
                   Span('￥')
                     .fontSize('12fp')
                     .fontColor(ColorConstants.RED)
-                  Span(`${item.herbal.price}`)
+                  Span(`${item.herbal.price * item.quantity}`)
                     .fontSize('16fp')
                     .fontColor(ColorConstants.RED)
                 }
 
-                Text('5份')
+                Text(`${item.quantity} 份`)
               }
             }
             .margin({

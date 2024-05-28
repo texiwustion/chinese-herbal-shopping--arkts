@@ -2,16 +2,33 @@ import { fakeOrderItems } from '../models/DataModel'
 import CartList from '../features/CartList'
 import { getCartItems } from '../utils/cartUtil'
 import { ColorConstants } from '../constants/ColorConstants'
+import { IOrderModel } from '../models/ViewModel'
+import promptAction from '@ohos.promptAction'
 
 @Component
 struct Cart {
-  @State totalPrice: number = 666
+  @StorageLink('orders') orders: IOrderModel[] = []
+  @StorageLink('test') @Watch('ordersChanged') test: number = 1
+
+  @State totalPrice: number = this.calculateTotalPrice();
+
+  // 计算订单总价的方法
+  calculateTotalPrice() {
+    return this.orders.reduce((sum, order) => {
+      console.info('订单: 状态 ', order.status === 'added')
+      return sum + (order.status === 'added' ? (order.herbal.price * order.quantity) : 0);
+    }, 0);
+  }
+
+  ordersChanged() {
+    console.info('订单: 全局变动, 数量 -> ', this.orders.length)
+    this.totalPrice = this.calculateTotalPrice();
+  }
 
   build() {
     Row() {
       Flex({direction: FlexDirection.Column, justifyContent: FlexAlign.SpaceBetween}) {
-        CartList({cartData: getCartItems(fakeOrderItems)})
-
+        CartList()
         Flex({direction: FlexDirection.Row, justifyContent: FlexAlign.End, alignItems: ItemAlign.Center}) {
           Text() {
             Span('￥')
@@ -24,6 +41,18 @@ struct Cart {
           Button('支付', { type: ButtonType.Normal, stateEffect: true })
             .margin('10vp')
             .backgroundColor(ColorConstants.GREEN_DEEP)
+            .onClick(() => {
+              this.orders = this.orders.map(order => ({
+                ...order,
+                status: 'purchased'
+              }));
+              promptAction.showToast({
+                message: '支付成功',
+                duration: 3000,
+                bottom: '60vp'
+              });
+              this.test += 1
+            })
         }
 
       }

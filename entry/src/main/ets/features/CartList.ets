@@ -2,21 +2,21 @@ import { CounterProduct } from '../components/CounterProduct';
 import { ColorConstants } from '../constants/ColorConstants';
 import { StyleConstants } from '../constants/StyleConstants';
 import { IOrderModel } from '../models/ViewModel'
+import { getCartItems } from '../utils/cartUtil';
 @Component
 struct CartList {
-  private cartData: IOrderModel[];
-
-  aboutToAppear() {
-    console.info('购物车列表数据: ', JSON.stringify(this.cartData))
-  }
+  @StorageLink('orders') orders: IOrderModel[] = []
+  @StorageLink('test') test: number = 1
 
   handleDelete(item: IOrderModel) {
     console.info(`购物车列表 -- 点击了删除 -- 项id = ${item.id}`)
+    this.orders = this.orders.filter(order => order.id !== item.id);
+    this.test += 1
   }
 
   build() {
     List() {
-      ForEach(this.cartData, (item: IOrderModel) => {
+      ForEach(getCartItems(this.orders), (item: IOrderModel) => {
         ListItem() {
           Flex({alignItems: ItemAlign.Center}) {
             Column() {
@@ -55,9 +55,14 @@ struct CartList {
                 }
 
                 CounterProduct({
-                  count: 5,
+                  count: item.quantity,
                   onNumberChange: (num: number) => {
-                    console.info(`触发了 onNumberChange 事件, 把改变后的 count = ${num} 持久化存储`)
+                    this.orders = this.orders.map(order => {
+                      if (order.id === item.id) {
+                        return { ...order, quantity: num };
+                      }
+                    })
+                    this.test += 1
                   }
                 })
               }

@@ -6,6 +6,9 @@ import { StyleConstants } from '../constants/StyleConstants'
 import UserTable from '../database/UserTable';
 
 AppStorage.SetOrCreate('username', '');
+// 全局订单列表
+AppStorage.SetOrCreate('orders', []);
+AppStorage.SetOrCreate('test', 1);
 
 @Entry
 @Component

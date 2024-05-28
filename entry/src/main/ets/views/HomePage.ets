@@ -1,7 +1,7 @@
 import { ColorConstants } from '../constants/ColorConstants'
 import { StyleConstants } from '../constants/StyleConstants'
 import { classifyTitle, herbalInfo } from '../models/DataModel'
-import { IHerbalModel } from '../models/ViewModel'
+import { IHerbalModel, IOrderModel } from '../models/ViewModel'
 import router from '@ohos.router'
 import groupByClass from '../utils/groupByClass'
 import HerbalTable from '../database/HerbalTable'
@@ -15,6 +15,7 @@ struct Home {
   @State results: { [key: string]: IHerbalModel[] } = {}
 
   @State titleIndex: number = 0
+
 
   performSearch(searchTerm: string): { [key: string]: IHerbalModel[] } {
     const results: { [key: string]: IHerbalModel[] } = {}
@@ -200,6 +201,7 @@ struct Home {
       Flex({direction: FlexDirection.Column}) {
         this.SearchBox()
         this.ClassifyTitle()
+        Divider().vertical(false).margin({ top: '8vp', bottom: '8vp' })
         Scroll() {
           Flex({direction: FlexDirection.Column}) {
             this.GroupView()
