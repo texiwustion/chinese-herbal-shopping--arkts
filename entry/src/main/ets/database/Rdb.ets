@@ -64,7 +64,7 @@ export default class Rdb {
       // 执行Sql语句，使用创建表的字符串
       this.rdbStore.executeSql(this.sqlCreateTable);
       // 打印日志
-      Logger.info(CommonConstants.RDB_TAG, 'getRdbStore() finished.');
+      Logger.info(CommonConstants.RDB_TAG, this.tableName + ' getRdbStore() finished.');
       // 执行方法入参的回调函数
       callback();
     });

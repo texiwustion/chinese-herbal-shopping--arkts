@@ -17,7 +17,7 @@ export default class CommonConstants {
   
   static readonly HERBAL_TABLE: CommonTable = {
     tableName: 'herbalTable',
-    sqlCreate: 'CREATE TABLE IF NOT EXISTS herbalTable(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, image TEXT, price REAL, class TEXT, count INTEGER, description TEXT)',
+    sqlCreate: 'CREATE TABLE IF NOT EXISTS herbalTable(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, image TEXT, price INTEGER, class TEXT, count INTEGER, description TEXT)',
     columns: ['id', 'name', 'image', 'price', 'class', 'count', 'description']
   }
 

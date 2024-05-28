@@ -5,7 +5,7 @@ import { IHerbalModel } from '../models/ViewModel';
 
 export default class HerbalTable {
   private herbalTable = new Rdb(CommonConstants.HERBAL_TABLE.tableName, CommonConstants.HERBAL_TABLE.sqlCreate, CommonConstants.HERBAL_TABLE.columns);
-  private static instance: HerbalTable
+  // private static instance: HerbalTable = null
 
   constructor(callback: Function = () => {}) {
     this.herbalTable.getRdbStore(callback);
@@ -17,14 +17,14 @@ export default class HerbalTable {
     this.herbalTable.getRdbStore(callback);
   }
 
-  static getInstance() {
-    if (!HerbalTable.instance) {
-      HerbalTable.instance = new HerbalTable(() => {
-        console.info('[herbalTable] 创建药材表成功')
-      })
-    }
-    return HerbalTable.instance
-  }
+  // static getInstance() {
+  //   if (!HerbalTable.instance) {
+  //     HerbalTable.instance = new HerbalTable(() => {
+  //       console.info('[herbalTable] 创建药材表成功')
+  //     })
+  //   }
+  //   return HerbalTable.instance
+  // }
 
   async addHerb(herb: IHerbalModel, callback: Function) {
     console.info('Adding herb: ', JSON.stringify(herb));
@@ -50,9 +50,8 @@ export default class HerbalTable {
   async loadData(callback: Function) {
     console.info('[herbalTable] 开始加载数据')
     const herbs: IHerbalModel[] = HerbalTable.generateRandomHerbs(24);
-    console.info(JSON.stringify(herbs[0]))
-    herbs.forEach((herb) => {
-      this.addHerb(herb, (err) => {
+    herbs.forEach(async (herb) => {
+      await this.addHerb(herb, (err) => {
         if (err) {
           console.error('Failed to add herb:', err);
         }
@@ -82,8 +81,8 @@ export default class HerbalTable {
       return {
         id: index + 1,
         name: herb.name,
-        image: `yc_${HerbalTable.getPinyin(herb.name)}`,
-        price: Math.random() * 100,
+        image: `common/images/yc_${HerbalTable.getPinyin(herb.name)}.jpg`,
+        price: Math.floor(Math.random() * 100),
         class: herb.class,
         count: Math.floor(Math.random() * 100),
         description: '这是一种非常常见的中药材'
@@ -100,7 +99,7 @@ export default class HerbalTable {
       '当归': 'danggui',
       '党参': 'dangshen',
       '大黄': 'dahuang',
-      '白术': 'baizhu',
+      '白术': 'baishu',
       '白芍': 'baishao',
       '茯苓': 'fuling',
       '川芎': 'chuanxiong',
@@ -111,15 +110,16 @@ export default class HerbalTable {
   }
 
   insertData(herb: IHerbalModel, callback: Function) {
-    this.queryById(herb.id, (result) => {
-      if (result.length > 0) {
-        callback(new Error('Herb with the same ID already exists'));
-      } else {
-        const valueBucket = this.generateBucket(herb);
-        this.herbalTable.insertData(valueBucket, callback);
-        callback(null);
-      }
-    });
+    const valueBucket = this.generateBucket(herb);
+    this.herbalTable.insertData(valueBucket, callback);
+    callback(null);
+    // this.queryById(herb.id, (result) => {
+    //   if (result.length > 0) {
+    //     callback(new Error('Herb with the same ID already exists'));
+    //   } else {
+    //
+    //   }
+    // });
   }
 
   // updateData(herb: IHerbalModel, callback: Function) {
@@ -151,9 +151,9 @@ export default class HerbalTable {
     this.herbalTable.query(predicates, this.queryFn(callback));
   }
 
-  queryByClass(_class: string, callback: (result: IHerbalModel[]) => void) {
+  queryByPartialName(partialName: string, callback: (result: IHerbalModel[]) => void) {
     let predicates = new relationalStore.RdbPredicates(CommonConstants.HERBAL_TABLE.tableName);
-    predicates.equalTo('class', _class);
+    predicates.contains('name', partialName);
     this.herbalTable.query(predicates, this.queryFn(callback));
   }
 
@@ -166,10 +166,18 @@ export default class HerbalTable {
       resultSet.goToFirstRow();
       const result: IHerbalModel[] = [];
       for (let i = 0; i < count; i++) {
-        let tmp: IHerbalModel
+        let tmp: IHerbalModel = {
+          id: 0,
+          name: '',
+          image: '',
+          price: 0,
+          class: '',
+          count: 0,
+          description: ''
+        }
         tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
         tmp.name = resultSet.getString(resultSet.getColumnIndex('name'));
-        tmp.image = JSON.parse(resultSet.getString(resultSet.getColumnIndex('image')))
+        tmp.image = resultSet.getString(resultSet.getColumnIndex('image'))
         tmp.price = resultSet.getDouble(resultSet.getColumnIndex('price'));
         tmp.class = resultSet.getString(resultSet.getColumnIndex('class'));
         tmp.count = resultSet.getDouble(resultSet.getColumnIndex('count'));
@@ -185,7 +193,7 @@ export default class HerbalTable {
     let obj: relationalStore.ValuesBucket = {};
     obj.id = herb.id;
     obj.name = herb.name;
-    obj.image = JSON.stringify(herb.image);
+    obj.image = herb.image as string;
     obj.price = herb.price;
     obj.class = herb.class;
     obj.count = herb.count;
@@ -194,4 +202,4 @@ export default class HerbalTable {
   }
 }
 
-export const herbalTable = HerbalTable.getInstance()
+// export default HerbalTable.getInstance()

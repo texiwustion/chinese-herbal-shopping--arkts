@@ -5,7 +5,6 @@ import Cart from '../views/CartPage'
 import Mine from '../views/MinePage'
 import RenderComponent from '../components/RenderComponent'
 import { ColorConstants } from '../constants/ColorConstants'
-import { herbalTable } from '../database/HerbalTable'
 
 @Entry
 @Component
@@ -32,12 +31,6 @@ struct Main {
         .fontWeight(500)
         .margin({top: StyleConstants.MARGIN_LESS})
     }
-  }
-
-  async aboutToAppear() {
-    await herbalTable.loadData(() => {
-      console.info('[herbalTable] 加载药材数据完成')
-    })
   }
 
   build() {

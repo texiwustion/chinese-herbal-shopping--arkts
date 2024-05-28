@@ -3,8 +3,14 @@ import { StyleConstants } from '../constants/StyleConstants'
 import { classifyTitle, herbalInfo } from '../models/DataModel'
 import { IHerbalModel } from '../models/ViewModel'
 import router from '@ohos.router'
+import groupByClass from '../utils/groupByClass'
+import HerbalTable from '../database/HerbalTable'
+
 @Component
 struct Home {
+  private HerbalTable = new HerbalTable(() => {})
+  @State groupedHerbalInfo: { [key: string]: IHerbalModel[] } = {}
+
   @State titleIndex: number = 0
   @State activityTitleIndex: number = 0
 
@@ -38,7 +44,7 @@ struct Home {
   @Builder
   ClassifyTitle() {
     Flex({ justifyContent: FlexAlign.Start, wrap: FlexWrap.Wrap }) {
-      ForEach(classifyTitle, (item: string, index?: number) => {
+      ForEach(Object.keys(this.groupedHerbalInfo), (item: string, index?: number) => {
         Text(item)
           .fontSize('18fp')
           .opacity(this.titleIndex === index ? 100 :  80)
@@ -55,7 +61,7 @@ struct Home {
           })
       }, (item: Resource) => JSON.stringify(item))
     }
-    .margin({ top: '8vp' })
+    .margin({ top: '8vp', bottom: '8vp' })
     .width(StyleConstants.WIDTH_FULL)
   }
 
@@ -119,6 +125,41 @@ struct Home {
       });
     })
   }
+  
+  @Builder
+  GroupView() {
+      ForEach(Object.keys(this.groupedHerbalInfo), (_class: string) => {
+        Text(_class)
+          .fontSize('21fp')
+          .fontColor(ColorConstants.GREEN_DEEP)
+        List() {
+          ForEach(this.groupedHerbalInfo[_class], (item: IHerbalModel) => {
+            ListItem() {
+              this.HerbalItem(item)
+            }
+            .margin('10vp')
+          }, (item: IHerbalModel) => item.id.toString())
+        }
+        .lanes(2)
+        .margin('12vp')
+        .padding({
+          top: '10vp',
+          bottom: '10vp'
+        })
+        .constraintSize({minHeight: 100})
+
+      }, (_class: string) => _class)
+  }
+
+  async aboutToAppear() {
+    this.HerbalTable.getRdbStore(() => {
+      this.HerbalTable.loadData(() => {
+        this.HerbalTable.queryAll((result: IHerbalModel[]) => {
+          this.groupedHerbalInfo = groupByClass(result)
+        });
+      })
+    })
+  }
 
   build() {
     Row() {
@@ -126,23 +167,12 @@ struct Home {
         this.SearchBox()
         this.ClassifyTitle()
         Scroll() {
-          Grid() {
-            ForEach(herbalInfo, (item: IHerbalModel) => {
-              GridItem() {
-                this.HerbalItem(item)
-              }
-            })
+          Flex({direction: FlexDirection.Column}) {
+            this.GroupView()
           }
-          .columnsTemplate('1fr 1fr')
-          .rowsGap('12vp')
-          .columnsGap('8vp')
-          .margin('12vp')
-          .padding({
-            top: '10vp',
-            bottom: '10vp'
-          })
         }
-        .scrollBar(BarState.Off)
+        .layoutWeight(1)
+        // .scrollBar(BarState.Off)
       }
       .padding({
         left: '12vp',
