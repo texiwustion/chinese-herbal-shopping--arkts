@@ -10,19 +10,45 @@ import HerbalTable from '../database/HerbalTable'
 struct Home {
   private HerbalTable = new HerbalTable(() => {})
   @State groupedHerbalInfo: { [key: string]: IHerbalModel[] } = {}
+  @State currentHerbalInfo: { [key: string]: IHerbalModel[] } = {}
+  @State isSearching: boolean = false
+  @State results: { [key: string]: IHerbalModel[] } = {}
 
   @State titleIndex: number = 0
-  @State activityTitleIndex: number = 0
+
+  performSearch(searchTerm: string): { [key: string]: IHerbalModel[] } {
+    const results: { [key: string]: IHerbalModel[] } = {}
+    for (const category in this.currentHerbalInfo) {
+      if (this.currentHerbalInfo.hasOwnProperty(category)) {
+        const herbals = this.currentHerbalInfo[category]
+        const filteredHerbals = herbals.filter(herbal => herbal.name.includes(searchTerm))
+        if (filteredHerbals.length > 0) {
+          results[category] = filteredHerbals
+        }
+      }
+    }
+    return results
+  }
 
   @Builder
   SearchBox() {
     Column() {
       Row() {
         Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceAround}) {
-          TextInput({placeholder: '搜索药材/分类'})
+          TextInput({placeholder: '搜索药材'})
             .backgroundColor(Color.White)
             .placeholderColor(ColorConstants.PLACEHOLDER)
             .maxLength(20)
+            .onChange((value) => {
+              if (value) {
+                this.isSearching = true
+                // 根据 `value` 进行搜索，更新结果
+                this.results = this.performSearch(value)
+              } else {
+                this.isSearching = false
+                this.results = {}
+              }
+            })
           Image($r('app.media.search'))
             .width('20vp')
             .height('20vp')
@@ -44,7 +70,7 @@ struct Home {
   @Builder
   ClassifyTitle() {
     Flex({ justifyContent: FlexAlign.Start, wrap: FlexWrap.Wrap }) {
-      ForEach(Object.keys(this.groupedHerbalInfo), (item: string, index?: number) => {
+      ForEach(['全部', ...Object.keys(this.groupedHerbalInfo)], (item: string, index?: number) => {
         Text(item)
           .fontSize('18fp')
           .opacity(this.titleIndex === index ? 100 :  80)
@@ -57,6 +83,13 @@ struct Home {
           .onClick(() => {
             if (index !== undefined) {
               this.titleIndex = index;
+              if (this.titleIndex !== 0) {
+                const key = Object.keys(this.groupedHerbalInfo)[this.titleIndex]
+                const value = this.groupedHerbalInfo[key]
+                this.currentHerbalInfo = { [key]: value }
+              } else {
+                this.currentHerbalInfo = this.groupedHerbalInfo
+              }
             }
           })
       }, (item: Resource) => JSON.stringify(item))
@@ -128,12 +161,12 @@ struct Home {
   
   @Builder
   GroupView() {
-      ForEach(Object.keys(this.groupedHerbalInfo), (_class: string) => {
+      ForEach(Object.keys(this.isSearching ? this.results : this.currentHerbalInfo), (_class: string) => {
         Text(_class)
           .fontSize('21fp')
           .fontColor(ColorConstants.GREEN_DEEP)
         List() {
-          ForEach(this.groupedHerbalInfo[_class], (item: IHerbalModel) => {
+          ForEach((this.isSearching ? this.results : this.currentHerbalInfo)[_class], (item: IHerbalModel) => {
             ListItem() {
               this.HerbalItem(item)
             }
